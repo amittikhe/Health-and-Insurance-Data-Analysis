@@ -19,5 +19,6 @@ Daily Delta : The incremental/transactional data from source dB on a daily basis
 Explanation: Once we extracted daily delta from the source table and loaded it in a temporary hive table. We merged it with the existing data which was present in the hive table(all data till previous date ) and removed the duplicate by partitioning on the basis of the key column and arranging in descending order based on timestamp.
 
 Data Validation: Count check Null Check Duplicate Check Referral Integrity Check Detailed Validation
+
 -------------------------------   END OF THE PROJECT   -----------------------------------------
 
