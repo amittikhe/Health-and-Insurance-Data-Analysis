@@ -2,11 +2,7 @@
 
 1) Create RDS PostgreSQL v12.10-R1
 Connect it using workbench
-jdbc:postgresql://edwa0.cqro4ofrzxbt.ap-south-1.rds.amazonaws.com:5432/EDWA1
-
-------------------------------------------------
-NOTE:- DB instance ID : edwa0 | DB name : EDWA1
-------------------------------------------------
+jdbc:postgresql://your_url.rds.amazonaws.com:5432/EDWA1
 
 Create all 8 tables with help of "02.Postgre_DDL"
 and insert data into all 8 tables with help of "03.Initial_Dataload"
@@ -164,17 +160,12 @@ In real time, there will be complex operation.
 
 ---------- TILL NOW WE WORKED ON HISTORIC DATA ONLY (RDS DATA) ---------------
 
----------------------------------------------------------------------------------------------------
-
-
 ---------- NOW, WE WILL WORK ON DELTA (NEWLY INSERTED, UPDATED DATA) -----------
 
 *****  SOURCE TEAM WILL DAILY UPLOAD DELTA DATA IN "INPUT" BUCKET OF s3 *****
 
 ---------------------------------------------------------------------------------------
-NOTE:- 	Suppose for subscriber table, 2 records updated(Address) and 3 records newly inserted.
-		So, In hive_staging table, we will get 5 records &
-		In hive_final, we will get 1003 records. (Previously there was 1000 records).
+NOTE:- 	Suppose for subscriber table, 2 records updated(Address) and 3 records newly inserted. So, In hive_staging table, we will get 5 records & In hive_final, we will get 1003 records. (Previously there was 1000 records).
 ---------------------------------------------------------------------------------------
 
 15) Create folder in s3 with name "input_data".
@@ -184,7 +175,6 @@ Upload "data" folder from our file manager into this "s3_bucket_name > EDWA > in
 ---------------------------------------------------------------------------------------------------
 
 16) Now, we need to move this delta data into hive staging tables.
-
 
 ---------------------------------------------------------------------------------------
 NOTE:- Make changes (path of s3) in "11.delta_processing_sb_cmp". Change all 4 paths (sub_path, add_path, cmp_path, staff_path).
@@ -211,12 +201,10 @@ select * from subscriber_details where subscriberid in (135,734);
 
 [SID = 135,734] ==> Compare old(final table) records and updated record, we can see the change in address. Previously it was pune and now it's parabhani. We have changed updated_date as well in new records.
 
-
 Now, whenever we run ddup job again, it will merge(Union) both tables(i.e, Staging tables[5 records] and final tables[1000 records]). This will give 1005 records. Then it will remove older records and keep new records and at the end we get 1003 records stored in hive final table. Staging tables get clean at last.
 
 ---------------------------------------------------------------------------------------
-NOTE:- On daily basis ==> delta processing job, ddup job and reporting job will get run.
-		Historic data we don't need to run daily. It will get load only once.
+NOTE:- On daily basis ==> delta processing job, ddup job and reporting job will get run. Historic data we don't need to run daily. It will get load only once.
 ---------------------------------------------------------------------------------------
 file name :- "10.dedup_Compaction"
 
@@ -242,7 +230,6 @@ How to rename file :- open file > object actions > Rename object
 
 Now, we have already copied "12.Hive_Final_To_S3_Extraction" script to "report.py" saved in path "home/hadoop/"
 
-
 /usr/bin/spark-submit  --jars /home/hadoop/dep/postgresql-42.2.14.jar,/home/hadoop/dep/phoenix-4.14.3-HBase-1.4-client.jar,/home/hadoop/dep/phoenix-spark-4.14.3-HBase-1.4.jar --master yarn --deploy-mode client --driver-memory 3g --executor-memory 2g --num-executors 1 --executor-cores 1  /home/hadoop/report.py
 
 Check both the reports by downloading it and compare.
@@ -255,5 +242,3 @@ New   :- India   | 107              | 38012
 
 -------------------------------   END OF THE PROJECT   -----------------------------------------
 
-CDC, autonuity  ---> This helps to create source file in s3
------------------------------------------------
