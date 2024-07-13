@@ -13,7 +13,7 @@ Now, we have the data in our RDS(RDBMS) and we need to load it into hbase using 
 
 2) Create EMR cluster  (Hadoop,Spark,Hbase,Zookeeper,Hive,Hue,Phoenix)
 Connect it using putty
-hostname: hadoop@ec2-65-2-187-188.ap-south-1.compute.amazonaws.com
+hostname: hadoop@your_details.compute.amazonaws.com
 
 create ref_load.py, trans_load.py in "/home/hadoop/" and paste the data from spark scripts "05.RDS_to_HBASE_Ref_import", "06.RDS_to_HBASE_Hist_Trans_import" respectively
 
